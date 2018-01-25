@@ -1,7 +1,7 @@
 # Личный проект «Кекстаграм» [![Build status][travis-image]][travis-url]
 
 * Студент: [Demid Miroshnichenko](https://up.htmlacademy.ru/javascript/12/user/302993).
-* Наставник: `Неизвестно`.
+* Наставник: [Роман Мисюрин](https://up.htmlacademy.ru/javascript/12/user/538267).
 
 ---
 
