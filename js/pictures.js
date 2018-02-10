@@ -2,8 +2,7 @@
 
 (function () {
 
-  var MIN_LIKES = 15;
-  var MAX_LIKES = 200;
+
   var COMMENTS = [
     'Всё отлично!',
     'В целом всё неплохо. Но не всё.',
@@ -14,8 +13,8 @@
   ];
 
   // функция генерирующая рандомное количество лайков
-  var getRandomLikes = function () {
-    return Math.round(MIN_LIKES + Math.random() * (MAX_LIKES - MIN_LIKES));
+  var getRandomLikes = function (minLikes, maxLikes) {
+    return Math.round(minLikes + Math.random() * (maxLikes - minLikes));
   };
 
   // получаем случайное количество комментариев
@@ -28,11 +27,11 @@
   var getPictures = function () {
     var pictures = [];
 
-    for (var i = 0; i < 26; i++) {
+    for (var i = 1; i < 26; i++) {
       pictures[i] =
         {
-          url: 'photos/' + [i + 1] + '.jpg',
-          likes: getRandomLikes(),
+          url: 'photos/' + [i] + '.jpg',
+          likes: getRandomLikes(15, 200),
           comments: getRandomCommentsNumber(COMMENTS),
         };
     }
@@ -59,18 +58,19 @@
   var fragment = document.createDocumentFragment();
 
   //  и воспроизводим шаблоны с помощью фрагмента
-  for (var j = 0; j < pictures.length; j++) {
+  for (var j = 1; j < pictures.length; j++) {
     fragment.appendChild(renderImage(pictures[j]));
   }
   pictureList.appendChild(fragment);
 
-  //  делаем видимым окно галереи
   var gallery = document.querySelector('.gallery-overlay');
-  gallery.classList.remove('hidden');
 
   //  заполняем окно данными с первой фотографии
-  gallery.querySelector('.gallery-overlay-image').src = pictures[0].url;
-  gallery.querySelector('.likes-count').textContent = pictures[0].likes;
-  gallery.querySelector('.comments-count').textContent = pictures[0].comments;
+  gallery.querySelector('.gallery-overlay-image').src = pictures[1].url;
+  gallery.querySelector('.likes-count').textContent = pictures[1].likes;
+  gallery.querySelector('.comments-count').textContent = pictures[1].comments;
 
-}());
+  //  делаем видимым окно галереи
+  gallery.classList.remove('hidden');
+
+})();
