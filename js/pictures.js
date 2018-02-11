@@ -13,7 +13,7 @@
   ];
 
   // функция генерирующая рандомное количество лайков
-  var getRandomLikes = function (minLikes, maxLikes) {
+  var getRandomRange = function (minLikes, maxLikes) {
     return Math.round(minLikes + Math.random() * (maxLikes - minLikes));
   };
 
@@ -31,7 +31,7 @@
       pictures[i] =
         {
           url: 'photos/' + [i] + '.jpg',
-          likes: getRandomLikes(15, 200),
+          likes: getRandomRange(15, 200),
           comments: getRandomCommentsNumber(COMMENTS),
         };
     }
