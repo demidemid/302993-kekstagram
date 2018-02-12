@@ -2,7 +2,8 @@
 
 (function () {
 
-
+  var ESC_KEYCODE = 27;
+  // var ENTER_KEYCODE = 13;
   var COMMENTS = [
     'Всё отлично!',
     'В целом всё неплохо. Но не всё.',
@@ -54,10 +55,10 @@
   };
 
 
-  //  создаем фрагмент
+  // создаем фрагмент
   var fragment = document.createDocumentFragment();
 
-  //  и воспроизводим шаблоны с помощью фрагмента
+  // и воспроизводим шаблоны с помощью фрагмента
   for (var j = 1; j < pictures.length; j++) {
     fragment.appendChild(renderImage(pictures[j]));
   }
@@ -65,12 +66,67 @@
 
   var gallery = document.querySelector('.gallery-overlay');
 
-  //  заполняем окно данными с первой фотографии
+  // заполняем окно данными с первой фотографии
   gallery.querySelector('.gallery-overlay-image').src = pictures[1].url;
   gallery.querySelector('.likes-count').textContent = pictures[1].likes;
   gallery.querySelector('.comments-count').textContent = pictures[1].comments;
 
-  //  делаем видимым окно галереи
-  gallery.classList.remove('hidden');
+  // делаем видимым окно галереи
+  // gallery.classList.remove('hidden');
+
+  // форма редактирования изображения
+  var uploadOverlay = document.querySelector('.upload-overlay');
+
+  // загрузка изображения и показ формы редактирования
+  var uploadFile = document.querySelector('#upload-file');
+  uploadFile.addEventListener('click', function () {
+    uploadFile.onchange = statusUploaded;
+  });
+
+  var statusUploaded = function () {
+    uploadOverlay.classList.remove('hidden');
+  };
+
+  // закрытие формы редактирования
+  var uploadFormCancel = document.querySelector('.upload-form-cancel');
+  uploadFormCancel.addEventListener('click', function () {
+    uploadOverlay.classList.add('hidden');
+  });
+
+  var closePopup = function () {
+    uploadOverlay.classList.add('hidden');
+    document.removeEventListener('keydown', onPopupEscPress);
+  };
+
+  // почему-то не работает
+  var onPopupEscPress = function (evt) {
+    if (evt.keyCode === ESC_KEYCODE) {
+      closePopup();
+    }
+  };
+
+  uploadOverlay.addEventListener('keydown', function (evt) {
+    if (evt.keyCode === ESC_KEYCODE) {
+      document.removeEventListener('keydown', onPopupEscPress);
+    }
+  });
+
+  // применение эффекта для изображения
+  var MAX_LEVEL_LINE = 818;
+  var MIN_LEVEL_LINE = 363;
+  var effectLevel = document.querySelector('.upload-effect-level');
+  var effectLevelLine = effectLevel.querySelector('.upload-effect-level-line');
+
+  // вычисление процентного соотношения эффекта
+  effectLevelLine.addEventListener('mouseup', function (evt) {
+
+    var levelLineRange = Math.round(((evt.clientX - MIN_LEVEL_LINE) * 100) / (MAX_LEVEL_LINE - MIN_LEVEL_LINE));
+    // для тестов
+    // console.log('evt.clientX', evt.clientX);
+    // console.log(levelLineRangePercent);
+    effectLevel.querySelector('.upload-effect-level-value').style.value = levelLineRange;
+    effectLevel.querySelector('.upload-effect-level-pin').style.left = levelLineRange + '%';
+    effectLevel.querySelector('.upload-effect-level-val').style.width = levelLineRange + '%';
+  });
 
 })();
