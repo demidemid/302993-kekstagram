@@ -79,8 +79,9 @@
 
   // загрузка изображения и показ формы редактирования
   var uploadFile = document.querySelector('#upload-file');
-  uploadFile.addEventListener('click', function () {
-    uploadFile.onchange = statusUploaded;
+  uploadFile.addEventListener('change', function () {
+    statusUploaded();
+    imagePreview.style.transform = 'scale(' + resizeValue.value.slice(0, -1) / 100 + ')';
   });
 
   var statusUploaded = function () {
@@ -134,8 +135,9 @@
   var minusButton = resizeControls.querySelector('.upload-resize-controls-button-dec');
   var plusButton = resizeControls.querySelector('.upload-resize-controls-button-inc');
   var resizeValue = resizeControls.querySelector('.upload-resize-controls-value');
+  var imagePreview = document.querySelector('.effect-image-preview');
 
-  var resizeControlsSizes = [0, 25, 50, 75, 100];
+  var resizeControlsSizes = [25, 50, 75, 100];
 
   minusButton.addEventListener('click', function () {
 
@@ -144,6 +146,9 @@
     for (var i = resizeControlsSizes.length - 1; i >= 0; i--) {
       if (resizeValueNumber <= resizeControlsSizes[i] && resizeValueNumber >= resizeControlsSizes[i - 1]) {
         resizeValue.value = resizeControlsSizes[i - 1] + '%';
+        imagePreview.style.transform = 'scale(' + resizeControlsSizes[i - 1] / 100 + ')';
+        // console.log('scale(' + resizeControlsSizes[i - 1] + 'deg)');
+        console.log(imagePreview.style.transform);
       }
     }
   });
@@ -155,6 +160,7 @@
     for (var i = 0; i < resizeControlsSizes.length; i++) {
       if (resizeValueNumber >= resizeControlsSizes[i] && resizeValueNumber <= resizeControlsSizes[i + 1]) {
         resizeValue.value = resizeControlsSizes[i + 1] + '%';
+        imagePreview.style.transform = 'scale(' + resizeControlsSizes[i + 1] / 100 + ')';
       }
     }
   });
