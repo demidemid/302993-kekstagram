@@ -129,4 +129,34 @@
     effectLevel.querySelector('.upload-effect-level-val').style.width = levelLineRange + '%';
   });
 
+  // Масштаб
+  var resizeControls = document.querySelector('.upload-resize-controls');
+  var minusButton = resizeControls.querySelector('.upload-resize-controls-button-dec');
+  var plusButton = resizeControls.querySelector('.upload-resize-controls-button-inc');
+  var resizeValue = resizeControls.querySelector('.upload-resize-controls-value');
+
+  var resizeControlsSizes = [0, 25, 50, 75, 100];
+
+  minusButton.addEventListener('click', function () {
+
+    var resizeValueNumber = resizeValue.value.slice(0, -1);
+
+    for (var i = resizeControlsSizes.length - 1; i >= 0; i--) {
+      if (resizeValueNumber <= resizeControlsSizes[i] && resizeValueNumber >= resizeControlsSizes[i - 1]) {
+        resizeValue.value = resizeControlsSizes[i - 1] + '%';
+      }
+    }
+  });
+
+  plusButton.addEventListener('click', function () {
+
+    var resizeValueNumber = resizeValue.value.slice(0, -1);
+
+    for (var i = 0; i < resizeControlsSizes.length; i++) {
+      if (resizeValueNumber >= resizeControlsSizes[i] && resizeValueNumber <= resizeControlsSizes[i + 1]) {
+        resizeValue.value = resizeControlsSizes[i + 1] + '%';
+      }
+    }
+  });
+
 })();
