@@ -130,6 +130,26 @@
     effectLevel.querySelector('.upload-effect-level-val').style.width = levelLineRange + '%';
   });
 
+  var effectControls = document.querySelector('.upload-effect-controls');
+  var effect = effectControls.querySelectorAll('input[type="radio"]');
+
+
+  for (var i = 0; i < effect.length; i++) {
+    effect[i].addEventListener('click', function (evt) {
+
+      var classList = imagePreview.classList;
+
+      for (var l = 0; l < classList.length; l++) {
+        if (classList[l] !== 'img') {
+          imagePreview.classList.remove(classList[l]);
+        }
+      }
+
+      var effectClass = evt.target;
+      imagePreview.classList.add(effectClass.id.substring(7));
+    });
+  }
+
   // Масштаб
   var resizeControls = document.querySelector('.upload-resize-controls');
   var minusButton = resizeControls.querySelector('.upload-resize-controls-button-dec');
@@ -143,12 +163,10 @@
 
     var resizeValueNumber = resizeValue.value.slice(0, -1);
 
-    for (var i = resizeControlsSizes.length - 1; i >= 0; i--) {
-      if (resizeValueNumber <= resizeControlsSizes[i] && resizeValueNumber >= resizeControlsSizes[i - 1]) {
-        resizeValue.value = resizeControlsSizes[i - 1] + '%';
-        imagePreview.style.transform = 'scale(' + resizeControlsSizes[i - 1] / 100 + ')';
-        // console.log('scale(' + resizeControlsSizes[i - 1] + 'deg)');
-        console.log(imagePreview.style.transform);
+    for (var m = resizeControlsSizes.length - 1; m >= 0; m--) {
+      if (resizeValueNumber <= resizeControlsSizes[m] && resizeValueNumber >= resizeControlsSizes[m - 1]) {
+        resizeValue.value = resizeControlsSizes[m - 1] + '%';
+        imagePreview.style.transform = 'scale(' + resizeControlsSizes[m - 1] / 100 + ')';
       }
     }
   });
@@ -157,12 +175,14 @@
 
     var resizeValueNumber = resizeValue.value.slice(0, -1);
 
-    for (var i = 0; i < resizeControlsSizes.length; i++) {
-      if (resizeValueNumber >= resizeControlsSizes[i] && resizeValueNumber <= resizeControlsSizes[i + 1]) {
-        resizeValue.value = resizeControlsSizes[i + 1] + '%';
-        imagePreview.style.transform = 'scale(' + resizeControlsSizes[i + 1] / 100 + ')';
+    for (var a = 0; a < resizeControlsSizes.length; a++) {
+      if (resizeValueNumber >= resizeControlsSizes[a] && resizeValueNumber <= resizeControlsSizes[a + 1]) {
+        resizeValue.value = resizeControlsSizes[a + 1] + '%';
+        imagePreview.style.transform = 'scale(' + resizeControlsSizes[a + 1] / 100 + ')';
       }
     }
   });
 
 })();
+
+
