@@ -86,6 +86,7 @@
 
   var statusUploaded = function () {
     uploadOverlay.classList.remove('hidden');
+    effectLevel.classList.add('hidden');
   };
 
   // закрытие формы редактирования
@@ -113,40 +114,110 @@
   });
 
   // применение эффекта для изображения
-  var MAX_LEVEL_LINE = 818;
-  var MIN_LEVEL_LINE = 363;
   var effectLevel = document.querySelector('.upload-effect-level');
-  var effectLevelLine = effectLevel.querySelector('.upload-effect-level-line');
+  var sliderElem = effectLevel.querySelector('.upload-effect-level-line');
+  var thumbElem = effectLevel.querySelector('.upload-effect-level-pin');
+  var sliderProgress = effectLevel.querySelector('.upload-effect-level-val');
+  var sliderValue = document.querySelector('.upload-effect-level-value');
+  var imagePreview = document.querySelector('.effect-image-preview');
 
   // вычисление процентного соотношения эффекта
-  effectLevelLine.addEventListener('mouseup', function (evt) {
+  thumbElem.onmousedown = function (e) {
+    var thumbCoords = getCoords(thumbElem);
+    var shiftX = e.pageX - thumbCoords.left;
+    // shiftY здесь не нужен, слайдер двигается только по горизонтали
 
-    var levelLineRange = Math.round(((evt.clientX - MIN_LEVEL_LINE) * 100) / (MAX_LEVEL_LINE - MIN_LEVEL_LINE));
-    // для тестов
-    // console.log('evt.clientX', evt.clientX);
-    // console.log(levelLineRangePercent);
-    effectLevel.querySelector('.upload-effect-level-value').style.value = levelLineRange;
-    effectLevel.querySelector('.upload-effect-level-pin').style.left = levelLineRange + '%';
-    effectLevel.querySelector('.upload-effect-level-val').style.width = levelLineRange + '%';
-  });
+    var sliderCoords = getCoords(sliderElem);
+
+    document.onmousemove = function (evt) {
+      //  вычесть координату родителя, т.к. position: relative
+      var newLeft = evt.pageX - shiftX - sliderCoords.left;
+
+      // курсор ушёл вне слайдера
+      if (newLeft < 0) {
+        newLeft = 0;
+      }
+      var rightEdge = sliderElem.offsetWidth - thumbElem.offsetWidth;
+      if (newLeft > rightEdge) {
+        newLeft = rightEdge;
+      }
+
+      // magicSize or css style?
+      var thumbElemHalfWidth = 9;
+      var ratio = Number(newLeft / rightEdge);
+
+      thumbElem.style.left = newLeft + thumbElemHalfWidth + 'px';
+      sliderProgress.style.width = (ratio * 100) + '%';
+      sliderValue.value = Math.round(ratio * 100);
+
+
+      // НЕ ЗНАЮ КАК ПО ДРУГОМУ СДЕЛАТЬ
+      // МОЖЕШЬ ПОДСКАЗАТЬ?
+      // if (imagePreview.classList.contains('effect-chrome')) {
+      //   document.querySelector('.effect-chrome').style.filter = 'grayscale(' + ratio.toFixed(1) + ')';
+      // }
+      // if (imagePreview.classList.contains('effect-sepia')) {
+      //   document.querySelector('effect-sepia').style.filter = 'sepia(0)';
+      // }
+      // if (imagePreview.classList.contains('effect-marvin')) {
+      //   document.querySelector('.effect-marvin').style.filter = 'invert(' + (ratio * 100).toFixed(0) + '%)';
+      // }
+      // if (imagePreview.classList.contains('effect-phobos')) {
+      //   document.querySelector('.effect-phobos').style.filter = 'blur(' + ratio.toFixed(1) * 3 + 'px)';
+      // }
+      // if (imagePreview.classList.contains('effect-heat')) {
+      //   document.querySelector('.effect-heat').style.filter = 'brightness(' + ratio.toFixed(1) * 3 + ')';
+      // }
+    };
+
+    document.onmouseup = function () {
+      document.onmousemove = document.onmouseup = null;
+    };
+
+    return false; // disable selection start (cursor change)
+  };
+
+  thumbElem.ondragstart = function () {
+    return false;
+  };
+
+  function getCoords(elem) { // кроме IE8-
+    var box = elem.getBoundingClientRect();
+
+    return {
+      top: box.top + pageYOffset,
+      left: box.left + pageXOffset
+    };
+
+  }
 
   var effectControls = document.querySelector('.upload-effect-controls');
   var effect = effectControls.querySelectorAll('input[type="radio"]');
 
-
+  // смена фильтров
   for (var i = 0; i < effect.length; i++) {
     effect[i].addEventListener('click', function (evt) {
 
       var classList = imagePreview.classList;
 
       for (var l = 0; l < classList.length; l++) {
-        if (classList[l] !== 'img') {
+        if (classList[l] !== 'effect-image-preview') {
           imagePreview.classList.remove(classList[l]);
         }
       }
 
       var effectClass = evt.target;
       imagePreview.classList.add(effectClass.id.substring(7));
+      // при смене фильтров значение ползунка и прогресса на 100%
+      thumbElem.style.left = 100 + '%';
+      sliderProgress.style.width = 100 + '%';
+
+      // убираем слайдер у оригинальнйо картинки
+      if (imagePreview.classList.contains('effect-none')) {
+        effectLevel.classList.add('hidden');
+      } else {
+        effectLevel.classList.remove('hidden');
+      }
     });
   }
 
@@ -155,8 +226,6 @@
   var minusButton = resizeControls.querySelector('.upload-resize-controls-button-dec');
   var plusButton = resizeControls.querySelector('.upload-resize-controls-button-inc');
   var resizeValue = resizeControls.querySelector('.upload-resize-controls-value');
-  var imagePreview = document.querySelector('.effect-image-preview');
-
   var resizeControlsSizes = [25, 50, 75, 100];
 
   minusButton.addEventListener('click', function () {
