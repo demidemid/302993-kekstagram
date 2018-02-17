@@ -162,21 +162,21 @@
 
       // НЕ ЗНАЮ КАК ПО ДРУГОМУ СДЕЛАТЬ
       // МОЖЕШЬ ПОДСКАЗАТЬ?
-      // if (imagePreview.classList.contains('effect-chrome')) {
-      //   document.querySelector('.effect-chrome').style.filter = 'grayscale(' + ratio.toFixed(1) + ')';
-      // }
-      // if (imagePreview.classList.contains('effect-sepia')) {
-      //   document.querySelector('effect-sepia').style.filter = 'sepia(0)';
-      // }
-      // if (imagePreview.classList.contains('effect-marvin')) {
-      //   document.querySelector('.effect-marvin').style.filter = 'invert(' + (ratio * 100).toFixed(0) + '%)';
-      // }
-      // if (imagePreview.classList.contains('effect-phobos')) {
-      //   document.querySelector('.effect-phobos').style.filter = 'blur(' + ratio.toFixed(1) * 3 + 'px)';
-      // }
-      // if (imagePreview.classList.contains('effect-heat')) {
-      //   document.querySelector('.effect-heat').style.filter = 'brightness(' + ratio.toFixed(1) * 3 + ')';
-      // }
+      if (imagePreview.classList.contains('effect-chrome')) {
+        document.querySelector('.effect-chrome').style.filter = 'grayscale(' + ratio.toFixed(1) + ')';
+      }
+      if (imagePreview.classList.contains('effect-sepia')) {
+        document.querySelector('effect-sepia').style.filter = 'sepia(' + (ratio * 100).toFixed(0) + '%)';
+      }
+      if (imagePreview.classList.contains('effect-marvin')) {
+        document.querySelector('.effect-marvin').style.filter = 'invert(' + (ratio * 100).toFixed(0) + '%)';
+      }
+      if (imagePreview.classList.contains('effect-phobos')) {
+        document.querySelector('.effect-phobos').style.filter = 'blur(' + ratio.toFixed(1) * 3 + 'px)';
+      }
+      if (imagePreview.classList.contains('effect-heat')) {
+        document.querySelector('.effect-heat').style.filter = 'brightness(' + ratio.toFixed(1) * 3 + ')';
+      }
     };
 
     document.onmouseup = function () {
