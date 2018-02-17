@@ -57,22 +57,31 @@
 
   // создаем фрагмент
   var fragment = document.createDocumentFragment();
+  // var gallery = document.querySelector('.gallery-overlay');
+  // var picture = document.querySelectorAll('.picture');
 
   // и воспроизводим шаблоны с помощью фрагмента
   for (var j = 1; j < pictures.length; j++) {
     fragment.appendChild(renderImage(pictures[j]));
   }
+
   pictureList.appendChild(fragment);
 
-  var gallery = document.querySelector('.gallery-overlay');
+  // picture.addEventListener('click', function () {
+  //   // заполняем окно данными с текущей фотографии
+  //   gallery.querySelector('.gallery-overlay-image').src = pictures[1].url;
+  //   gallery.querySelector('.likes-count').textContent = pictures[1].likes;
+  //   gallery.querySelector('.comments-count').textContent = pictures[1].comments;
 
-  // заполняем окно данными с первой фотографии
-  gallery.querySelector('.gallery-overlay-image').src = pictures[1].url;
-  gallery.querySelector('.likes-count').textContent = pictures[1].likes;
-  gallery.querySelector('.comments-count').textContent = pictures[1].comments;
+  //   // делаем видимым окно галереи
+  //   gallery.classList.remove('hidden');
+  // });
 
-  // делаем видимым окно галереи
-  // gallery.classList.remove('hidden');
+  // for (var p = 0; p < picture.length; p++) {
+  //   picture[p].addEventListener('click', function () {
+
+  //   });
+  // }
 
   // форма редактирования изображения
   var uploadOverlay = document.querySelector('.upload-overlay');
@@ -84,21 +93,11 @@
     imagePreview.style.transform = 'scale(' + resizeValue.value.slice(0, -1) / 100 + ')';
   });
 
-  var statusUploaded = function () {
-    uploadOverlay.classList.remove('hidden');
-    effectLevel.classList.add('hidden');
-  };
-
   // закрытие формы редактирования
   var uploadFormCancel = document.querySelector('.upload-form-cancel');
   uploadFormCancel.addEventListener('click', function () {
     uploadOverlay.classList.add('hidden');
   });
-
-  var closePopup = function () {
-    uploadOverlay.classList.add('hidden');
-    document.removeEventListener('keydown', onPopupEscPress);
-  };
 
   // почему-то не работает
   var onPopupEscPress = function (evt) {
@@ -113,6 +112,20 @@
     }
   });
 
+  // открытие поп-апа загрузки изображение
+  // скрытие уровня эффекта по умолчанию
+  var statusUploaded = function () {
+    uploadOverlay.classList.remove('hidden');
+    effectLevel.classList.add('hidden');
+    document.addEventListener('keydown', onPopupEscPress);
+  };
+
+  // функция закрытия
+  var closePopup = function () {
+    uploadOverlay.classList.add('hidden');
+    document.removeEventListener('keydown', onPopupEscPress);
+  };
+
   // применение эффекта для изображения
   var effectLevel = document.querySelector('.upload-effect-level');
   var sliderElem = effectLevel.querySelector('.upload-effect-level-line');
@@ -125,8 +138,6 @@
   thumbElem.onmousedown = function (e) {
     var thumbCoords = getCoords(thumbElem);
     var shiftX = e.pageX - thumbCoords.left;
-    // shiftY здесь не нужен, слайдер двигается только по горизонтали
-
     var sliderCoords = getCoords(sliderElem);
 
     document.onmousemove = function (evt) {
@@ -229,7 +240,6 @@
   var resizeControlsSizes = [25, 50, 75, 100];
 
   minusButton.addEventListener('click', function () {
-
     var resizeValueNumber = resizeValue.value.slice(0, -1);
 
     for (var m = resizeControlsSizes.length - 1; m >= 0; m--) {
@@ -241,7 +251,6 @@
   });
 
   plusButton.addEventListener('click', function () {
-
     var resizeValueNumber = resizeValue.value.slice(0, -1);
 
     for (var a = 0; a < resizeControlsSizes.length; a++) {
