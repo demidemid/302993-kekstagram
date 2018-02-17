@@ -134,7 +134,7 @@
   var sliderValue = document.querySelector('.upload-effect-level-value');
   var imagePreview = document.querySelector('.effect-image-preview');
 
-  // вычисление процентного соотношения эффекта
+  // ползунок (количество эффекта)
   thumbElem.onmousedown = function (e) {
     var thumbCoords = getCoords(thumbElem);
     var shiftX = e.pageX - thumbCoords.left;
