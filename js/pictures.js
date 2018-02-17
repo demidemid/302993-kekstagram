@@ -57,8 +57,7 @@
 
   // создаем фрагмент
   var fragment = document.createDocumentFragment();
-  // var gallery = document.querySelector('.gallery-overlay');
-  // var picture = document.querySelectorAll('.picture');
+  var gallery = document.querySelector('.gallery-overlay');
 
   // и воспроизводим шаблоны с помощью фрагмента
   for (var j = 1; j < pictures.length; j++) {
@@ -67,21 +66,20 @@
 
   pictureList.appendChild(fragment);
 
-  // picture.addEventListener('click', function () {
-  //   // заполняем окно данными с текущей фотографии
-  //   gallery.querySelector('.gallery-overlay-image').src = pictures[1].url;
-  //   gallery.querySelector('.likes-count').textContent = pictures[1].likes;
-  //   gallery.querySelector('.comments-count').textContent = pictures[1].comments;
+  var picture = document.querySelectorAll('.picture');
 
-  //   // делаем видимым окно галереи
-  //   gallery.classList.remove('hidden');
-  // });
+  for (var p = 0; p < picture.length; p++) {
+    picture.addEventListener('click', function () {
+      // заполняем окно данными с текущей фотографии
+      gallery.querySelector('.gallery-overlay-image').src = pictures[1].url;
+      gallery.querySelector('.likes-count').textContent = pictures[1].likes;
+      gallery.querySelector('.comments-count').textContent = pictures[1].comments;
 
-  // for (var p = 0; p < picture.length; p++) {
-  //   picture[p].addEventListener('click', function () {
+      // делаем видимым окно галереи
+      gallery.classList.remove('hidden');
+    });
+  }
 
-  //   });
-  // }
 
   // форма редактирования изображения
   var uploadOverlay = document.querySelector('.upload-overlay');
