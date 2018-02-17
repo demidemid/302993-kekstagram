@@ -157,7 +157,7 @@
 
       thumbElem.style.left = newLeft + thumbElemHalfWidth + 'px';
       sliderProgress.style.width = (ratio * 100) + '%';
-      sliderValue.value = Math.round(ratio * 100);
+      sliderValue.setAttribute('value', Math.round(ratio * 100));
 
 
       // НЕ ЗНАЮ КАК ПО ДРУГОМУ СДЕЛАТЬ
