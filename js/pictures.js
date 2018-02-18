@@ -69,15 +69,17 @@
   var picture = document.querySelectorAll('.picture');
 
   for (var p = 0; p < picture.length; p++) {
-    picture[p].addEventListener('click', function () {
-      // заполняем окно данными с текущей фотографии
-      gallery.querySelector('.gallery-overlay-image').src = pictures[p].url;
-      gallery.querySelector('.likes-count').textContent = pictures[p].likes;
-      gallery.querySelector('.comments-count').textContent = pictures[p].comments;
+    (function (pic) {
+      pic.addEventListener('click', function () {
+        // заполняем окно данными с текущей фотографии
+        gallery.querySelector('.gallery-overlay-image').src = pictures[p].url;
+        gallery.querySelector('.likes-count').textContent = pictures[p].likes;
+        gallery.querySelector('.comments-count').textContent = pictures[p].comments;
 
-      // делаем видимым окно галереи
-      gallery.classList.remove('hidden');
-    });
+        // делаем видимым окно галереи
+        gallery.classList.remove('hidden');
+      });
+    })(picture[p]);
   }
 
 
