@@ -84,6 +84,7 @@
     onCloseButtonClick();
     document.removeEventListener('keydown', onPopupEscPress);
   });
+
   closeButton.addEventListener('keydown', function (evt) {
     if (evt.keyCode === ENTER_KEYCODE) {
       gallery.classList.add('hidden');
@@ -101,17 +102,18 @@
     });
   }
 
-  // -----------------------------------------------------------------------------------------------------
-
-  // форма редактирования изображения
+  // ----------------------- форма редактирования изображения ---------------------- //
   var uploadOverlay = document.querySelector('.upload-overlay');
+  var uploadFile = document.querySelector('#upload-file');
+
+  var onUploadBtnChange = function () {
+    uploadOverlay.classList.remove('hidden');
+    statusUploaded();
+  };
 
   // загрузка изображения и показ формы редактирования
-  var uploadFile = document.querySelector('#upload-file');
-  uploadFile.addEventListener('change', function () {
-    statusUploaded();
-    imagePreview.style.transform = 'scale(' + resizeValue.value.slice(0, -1) / 100 + ')';
-  });
+
+  uploadFile.addEventListener('change', onUploadBtnChange);
 
   // закрытие формы редактирования
   var uploadFormCancel = document.querySelector('.upload-form-cancel');
@@ -119,7 +121,6 @@
     uploadOverlay.classList.add('hidden');
   });
 
-  // почему-то не работает
   var onPopupEscPress = function (evt) {
     if (evt.keyCode === ESC_KEYCODE) {
       closePopup();
@@ -129,15 +130,18 @@
   uploadOverlay.addEventListener('keydown', function (evt) {
     if (evt.keyCode === ESC_KEYCODE) {
       document.removeEventListener('keydown', onPopupEscPress);
+      // добавил, но почему то не работает, в чем причина?
+      document.removeEventListener('change', onUploadBtnChange);
+      uploadFile.addEventListener('change', onUploadBtnChange);
     }
   });
 
   // открытие поп-апа загрузки изображение
   // скрытие уровня эффекта по умолчанию
   var statusUploaded = function () {
-    uploadOverlay.classList.remove('hidden');
     effectLevel.classList.add('hidden');
     document.addEventListener('keydown', onPopupEscPress);
+    imagePreview.style.transform = 'scale(' + resizeValue.value.slice(0, -1) / 100 + ')';
   };
 
   // функция закрытия
@@ -188,7 +192,7 @@
         document.querySelector('.effect-chrome').style.filter = 'grayscale(' + ratio.toFixed(1) + ')';
       }
       if (imagePreview.classList.contains('effect-sepia')) {
-        document.querySelector('effect-sepia').style.filter = 'sepia(' + (ratio * 100).toFixed(0) + '%)';
+        document.querySelector('.effect-sepia').style.filter = 'sepia(' + ratio.toFixed(1) + ')';
       }
       if (imagePreview.classList.contains('effect-marvin')) {
         document.querySelector('.effect-marvin').style.filter = 'invert(' + (ratio * 100).toFixed(0) + '%)';
