@@ -185,9 +185,6 @@
       sliderProgress.style.width = (ratio * 100) + '%';
       sliderValue.setAttribute('value', Math.round(ratio * 100));
 
-
-      // НЕ ЗНАЮ КАК ПО ДРУГОМУ СДЕЛАТЬ
-      // МОЖЕШЬ ПОДСКАЗАТЬ?
       if (imagePreview.classList.contains('effect-chrome')) {
         document.querySelector('.effect-chrome').style.filter = 'grayscale(' + ratio.toFixed(1) + ')';
       }
@@ -241,15 +238,32 @@
         }
       }
 
-      var effectClass = evt.target;
-      imagePreview.classList.add(effectClass.id.substring(7));
+      var effectClass = evt.target.id.substring(7);
+      imagePreview.classList.add(effectClass);
       // при смене фильтров значение ползунка и прогресса на 100%
       thumbElem.style.left = 100 + '%';
       sliderProgress.style.width = 100 + '%';
 
+      if (imagePreview.classList.contains('effect-chrome')) {
+        document.querySelector('.effect-chrome').style.filter = 'grayscale(1)';
+      }
+      if (imagePreview.classList.contains('effect-sepia')) {
+        document.querySelector('.effect-sepia').style.filter = 'sepia(1)';
+      }
+      if (imagePreview.classList.contains('effect-marvin')) {
+        document.querySelector('.effect-marvin').style.filter = 'invert(100%)';
+      }
+      if (imagePreview.classList.contains('effect-phobos')) {
+        document.querySelector('.effect-phobos').style.filter = 'blur(3px)';
+      }
+      if (imagePreview.classList.contains('effect-heat')) {
+        document.querySelector('.effect-heat').style.filter = 'brightness(3)';
+      }
+
       // убираем слайдер у оригинальнйо картинки
       if (imagePreview.classList.contains('effect-none')) {
         effectLevel.classList.add('hidden');
+        document.querySelector('.effect-none').style.filter = 'none';
       } else {
         effectLevel.classList.remove('hidden');
       }
