@@ -3,7 +3,7 @@
 (function () {
 
   var ESC_KEYCODE = 27;
-  // var ENTER_KEYCODE = 13;
+  var ENTER_KEYCODE = 13;
   var COMMENTS = [
     'Всё отлично!',
     'В целом всё неплохо. Но не всё.',
@@ -66,22 +66,42 @@
 
   pictureList.appendChild(fragment);
 
+  // ------------------------- Открытие картинки по клику на превью -------------------- //
+
   var picture = document.querySelectorAll('.picture');
+  var closeButton = document.querySelector('.gallery-overlay-close');
+
+  var onCloseButtonClick = function () {
+    gallery.classList.add('hidden');
+  };
+
+  var onPicturePrewiewClick = function () {
+    gallery.classList.remove('hidden');
+    document.addEventListener('keydown', onPopupEscPress);
+  };
+
+  closeButton.addEventListener('click', function () {
+    onCloseButtonClick();
+    document.removeEventListener('keydown', onPopupEscPress);
+  });
+  closeButton.addEventListener('keydown', function (evt) {
+    if (evt.keyCode === ENTER_KEYCODE) {
+      gallery.classList.add('hidden');
+    }
+  });
 
   for (var p = 0; p < picture.length; p++) {
-    (function (pic) {
-      pic.addEventListener('click', function () {
-        // заполняем окно данными с текущей фотографии
-        gallery.querySelector('.gallery-overlay-image').src = pictures[p].url;
-        gallery.querySelector('.likes-count').textContent = pictures[p].likes;
-        gallery.querySelector('.comments-count').textContent = pictures[p].comments;
-
-        // делаем видимым окно галереи
-        gallery.classList.remove('hidden');
-      });
-    })(picture[p]);
+    picture[p].addEventListener('click', function (evt) {
+      evt.preventDefault();
+      onPicturePrewiewClick();
+      var currentPicture = evt.currentTarget;
+      gallery.querySelector('.gallery-overlay-image').src = currentPicture.querySelector('img').src;
+      gallery.querySelector('.likes-count').textContent = currentPicture.querySelector('.picture-likes').textContent;
+      gallery.querySelector('.comments-count').textContent = currentPicture.querySelector('.picture-comments').textContent;
+    });
   }
 
+  // -----------------------------------------------------------------------------------------------------
 
   // форма редактирования изображения
   var uploadOverlay = document.querySelector('.upload-overlay');
@@ -260,6 +280,50 @@
       }
     }
   });
+
+  // Хэш-тэги
+  var buttonSubmitForm = document.querySelector('.upload-form-submit');
+
+
+  function getDataFromInput() {
+    var input = document.querySelector('.upload-form-hashtags');
+    var inputData = input.value;
+
+    var tagsArr = inputData.split(' ');
+    var result = [];
+
+    for (var t = 0; t < tagsArr.length; t++) {
+      var lowerCase = tagsArr[i].toLowerCase();
+
+      if (result.indexOf(lowerCase) !== -1) {
+        input.setCustomValidity('дубль');
+        return;
+      }
+
+      if (tagsArr[t].length) {
+        result.push(tagsArr[t].toLowerCase());
+      }
+    }
+
+    if (result.length > 5) {
+      input.setCustomValidity('слишком много хэштегов');
+    }
+
+    for (var r = 0; r < result.length; r++) {
+      if (result[r].charAt(0) !== '#') {
+        input.setCustomValidity('отсутствует знак решетка (#) у хэштега');
+      }
+
+      if (result[r].length > 20) {
+        input.setCustomValidity('максимальная длинна хэштега не должна быть больше 20 символов');
+      }
+    }
+  }
+
+  buttonSubmitForm.addEventListener('click', function () {
+    getDataFromInput();
+  }
+  );
 
 })();
 
