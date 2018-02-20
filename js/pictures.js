@@ -334,10 +334,8 @@
       }
 
       if (result[r].length > 20) {
-        console.log('ghbbbbbbbbbbbbbbbbbdtn');
         inputHashtags.valid = true;
         inputHashtags.setCustomValidity('максимальная длинна хэштега не должна быть больше 20 символов');
-        console.log('ghbbbbbbbbbbbbbbbbbdtn', inputHashtags.valid);
       } else {
         inputHashtags.setCustomValidity('');
       }
