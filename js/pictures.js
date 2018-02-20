@@ -158,7 +158,30 @@
   var sliderValue = document.querySelector('.upload-effect-level-value');
   var imagePreview = document.querySelector('.effect-image-preview');
 
-  // ползунок (количество эффекта)
+  // функция вычисление получения стиля эффекта из значения ползунка
+  var getIntensityLevel = function (level) {
+    if (imagePreview.classList.contains('effect-chrome')) {
+      document.querySelector('.effect-chrome').style.filter = 'grayscale(' + level.toFixed(1) + ')';
+    }
+
+    if (imagePreview.classList.contains('effect-sepia')) {
+      document.querySelector('.effect-sepia').style.filter = 'sepia(' + level.toFixed(1) + ')';
+    }
+
+    if (imagePreview.classList.contains('effect-marvin')) {
+      document.querySelector('.effect-marvin').style.filter = 'invert(' + (level * 100).toFixed(0) + '%)';
+    }
+
+    if (imagePreview.classList.contains('effect-phobos')) {
+      document.querySelector('.effect-phobos').style.filter = 'blur(' + level.toFixed(1) * 3 + 'px)';
+    }
+
+    if (imagePreview.classList.contains('effect-heat')) {
+      document.querySelector('.effect-heat').style.filter = 'brightness(' + level.toFixed(1) * 3 + ')';
+    }
+  };
+
+  // функция ползунок (количество эффекта)
   thumbElem.onmousedown = function (e) {
     var thumbCoords = getCoords(thumbElem);
     var shiftX = e.pageX - thumbCoords.left;
@@ -185,21 +208,7 @@
       sliderProgress.style.width = (ratio * 100) + '%';
       sliderValue.setAttribute('value', Math.round(ratio * 100));
 
-      if (imagePreview.classList.contains('effect-chrome')) {
-        document.querySelector('.effect-chrome').style.filter = 'grayscale(' + ratio.toFixed(1) + ')';
-      }
-      if (imagePreview.classList.contains('effect-sepia')) {
-        document.querySelector('.effect-sepia').style.filter = 'sepia(' + ratio.toFixed(1) + ')';
-      }
-      if (imagePreview.classList.contains('effect-marvin')) {
-        document.querySelector('.effect-marvin').style.filter = 'invert(' + (ratio * 100).toFixed(0) + '%)';
-      }
-      if (imagePreview.classList.contains('effect-phobos')) {
-        document.querySelector('.effect-phobos').style.filter = 'blur(' + ratio.toFixed(1) * 3 + 'px)';
-      }
-      if (imagePreview.classList.contains('effect-heat')) {
-        document.querySelector('.effect-heat').style.filter = 'brightness(' + ratio.toFixed(1) * 3 + ')';
-      }
+      getIntensityLevel(ratio);
     };
 
     document.onmouseup = function () {
@@ -244,21 +253,7 @@
       thumbElem.style.left = 100 + '%';
       sliderProgress.style.width = 100 + '%';
 
-      if (imagePreview.classList.contains('effect-chrome')) {
-        document.querySelector('.effect-chrome').style.filter = 'grayscale(1)';
-      }
-      if (imagePreview.classList.contains('effect-sepia')) {
-        document.querySelector('.effect-sepia').style.filter = 'sepia(1)';
-      }
-      if (imagePreview.classList.contains('effect-marvin')) {
-        document.querySelector('.effect-marvin').style.filter = 'invert(100%)';
-      }
-      if (imagePreview.classList.contains('effect-phobos')) {
-        document.querySelector('.effect-phobos').style.filter = 'blur(3px)';
-      }
-      if (imagePreview.classList.contains('effect-heat')) {
-        document.querySelector('.effect-heat').style.filter = 'brightness(3)';
-      }
+      getIntensityLevel(1);
 
       // убираем слайдер у оригинальнйо картинки
       if (imagePreview.classList.contains('effect-none')) {
@@ -300,22 +295,24 @@
   });
 
   // Хэш-тэги
+  var form = document.querySelector('.upload-form');
   var buttonSubmitForm = document.querySelector('.upload-form-submit');
-
+  var formDescription = document.querySelector('.upload-form-description');
 
   function getDataFromInput() {
-    var input = document.querySelector('.upload-form-hashtags');
-    var inputData = input.value;
+    var inputHashtags = document.querySelector('.upload-form-hashtags');
+    var inputData = inputHashtags.value;
 
     var tagsArr = inputData.split(' ');
     var result = [];
 
     for (var t = 0; t < tagsArr.length; t++) {
-      var lowerCase = tagsArr[i].toLowerCase();
+      var lowerCase = tagsArr[t].toLowerCase();
 
       if (result.indexOf(lowerCase) !== -1) {
-        input.setCustomValidity('дубль');
-        return;
+        inputHashtags.setCustomValidity('дубль');
+      } else {
+        inputHashtags.setCustomValidity('');
       }
 
       if (tagsArr[t].length) {
@@ -324,21 +321,48 @@
     }
 
     if (result.length > 5) {
-      input.setCustomValidity('слишком много хэштегов');
+      inputHashtags.setCustomValidity('слишком много хэштегов');
+    } else {
+      inputHashtags.setCustomValidity('');
     }
 
     for (var r = 0; r < result.length; r++) {
       if (result[r].charAt(0) !== '#') {
-        input.setCustomValidity('отсутствует знак решетка (#) у хэштега');
+        inputHashtags.setCustomValidity('отсутствует знак решетка (#) у хэштега');
+      } else {
+        inputHashtags.setCustomValidity('');
       }
 
       if (result[r].length > 20) {
-        input.setCustomValidity('максимальная длинна хэштега не должна быть больше 20 символов');
+        console.log('ghbbbbbbbbbbbbbbbbbdtn');
+        inputHashtags.valid = true;
+        inputHashtags.setCustomValidity('максимальная длинна хэштега не должна быть больше 20 символов');
+        console.log('ghbbbbbbbbbbbbbbbbbdtn', inputHashtags.valid);
+      } else {
+        inputHashtags.setCustomValidity('');
       }
     }
+
+    if (formDescription.validity.tooLong === true) {
+      formDescription.setCustomValidity('Вы ввели больше, чем 140 символов');
+    } else {
+      formDescription.setCustomValidity(''); // Has to be an empty string
+    }
+
+    if (result.length > 5) {
+      inputHashtags.setCustomValidity('слишком много хэштегов');
+    } else {
+      inputHashtags.setCustomValidity('');
+    }
+
+    if (formDescription.valid === false && inputHashtags.valid === false) {
+      form.submit();
+    }
+
   }
 
   buttonSubmitForm.addEventListener('click', function () {
+    // evtSubmitForm.preventDefault();
     getDataFromInput();
   }
   );
