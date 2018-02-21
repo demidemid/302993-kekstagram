@@ -297,73 +297,85 @@
   // Хэш-тэги
   var form = document.querySelector('.upload-form');
   var buttonSubmitForm = document.querySelector('.upload-form-submit');
+  var inputHashtags = document.querySelector('.upload-form-hashtags');
   var formDescription = document.querySelector('.upload-form-description');
+  var ERROR_COLOR = '#E82C31';
+  var SUCCESS_COLOR = 'inherit';
+  var DESCRIPTION_MAX_LENGTH = 140;
 
-  function getDataFromInput() {
-    var inputHashtags = document.querySelector('.upload-form-hashtags');
-    var inputData = inputHashtags.value;
+  var addInputError = function (inputName) {
+    inputName.style.borderColor = ERROR_COLOR;
+    inputName.style.outlineColor = ERROR_COLOR;
+  };
 
-    var tagsArr = inputData.split(' ');
-    var result = [];
+  var removeInputError = function (inputName) {
+    inputName.style.outlineColor = SUCCESS_COLOR;
+    inputName.style.borderColor = SUCCESS_COLOR;
+  };
 
-    for (var t = 0; t < tagsArr.length; t++) {
-      var lowerCase = tagsArr[t].toLowerCase();
+  inputHashtags.addEventListener('change', function () {
+    var inputData = inputHashtags.value.toLowerCase().trim();
+    var result = inputData.split(' ');
 
-      if (result.indexOf(lowerCase) !== -1) {
-        inputHashtags.setCustomValidity('дубль');
-      } else {
-        inputHashtags.setCustomValidity('');
+    var checkHashtags = function () {
+      for (var t = 0; t < result.length; t++) {
+
+        if (result[t].charAt(0) !== '#') {
+          inputHashtags.setCustomValidity('отсутствует знак решетка (#) у хэштега');
+          addInputError(inputHashtags);
+        } else if (result[t].length > 20) {
+          inputHashtags.setCustomValidity('максимальная длинна хэштега не должна быть больше 20 символов');
+          addInputError(inputHashtags);
+        } else {
+          inputHashtags.setCustomValidity('');
+          removeInputError(inputHashtags);
+        }
+
+        for (var r = 0; r < result.length - 1; r++) {
+          if (result[t] === result[r + 1]) {
+            // console.log('');
+            inputHashtags.setCustomValidity('хэштэги не должны повторяться');
+            addInputError(inputHashtags);
+          } else {
+            inputHashtags.setCustomValidity('');
+            removeInputError(inputHashtags);
+          }
+
+        }
       }
-
-      if (tagsArr[t].length) {
-        result.push(tagsArr[t].toLowerCase());
-      }
-    }
+    };
 
     if (result.length > 5) {
       inputHashtags.setCustomValidity('слишком много хэштегов');
+      addInputError(inputHashtags);
     } else {
       inputHashtags.setCustomValidity('');
+      removeInputError(inputHashtags);
+      checkHashtags();
     }
 
-    for (var r = 0; r < result.length; r++) {
-      if (result[r].charAt(0) !== '#') {
-        inputHashtags.setCustomValidity('отсутствует знак решетка (#) у хэштега');
-      } else {
-        inputHashtags.setCustomValidity('');
-      }
 
-      if (result[r].length > 20) {
-        inputHashtags.valid = true;
-        inputHashtags.setCustomValidity('максимальная длинна хэштега не должна быть больше 20 символов');
-      } else {
-        inputHashtags.setCustomValidity('');
-      }
-    }
+  });
 
-    if (formDescription.validity.tooLong === true) {
-      formDescription.setCustomValidity('Вы ввели больше, чем 140 символов');
+  formDescription.addEventListener('change', function () {
+    if (formDescription.value.length > DESCRIPTION_MAX_LENGTH) {
+      formDescription.setCustomValidity('Максимальная длинна комментария ' + DESCRIPTION_MAX_LENGTH + ' символов!');
+      formDescription.style.borderColor = ERROR_COLOR;
+      formDescription.style.outlineColor = ERROR_COLOR;
     } else {
-      formDescription.setCustomValidity(''); // Has to be an empty string
+      formDescription.setCustomValidity('');
+      formDescription.style.outlineColor = SUCCESS_COLOR;
+      formDescription.style.borderColor = SUCCESS_COLOR;
     }
-
-    if (result.length > 5) {
-      inputHashtags.setCustomValidity('слишком много хэштегов');
-    } else {
-      inputHashtags.setCustomValidity('');
-    }
-
-    if (formDescription.valid === false && inputHashtags.valid === false) {
-      form.submit();
-    }
-
-  }
+  });
 
   buttonSubmitForm.addEventListener('click', function () {
-    // evtSubmitForm.preventDefault();
-    getDataFromInput();
+    if (formDescription.validity.valid === false && inputHashtags.validity.valid === false) {
+      form.submit();
+    }
   }
   );
+
 
 })();
 
