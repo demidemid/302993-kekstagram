@@ -4,6 +4,10 @@
 
   var ESC_KEYCODE = 27;
   var ENTER_KEYCODE = 13;
+  var ERROR_COLOR = '#E82C31';
+  var DESCRIPTION_MAX_LENGTH = 140;
+  var HASHTAG_MAX_LENGTH = 20;
+  var HASHTAG_QUANTITY = 5;
   var COMMENTS = [
     'Всё отлично!',
     'В целом всё неплохо. Но не всё.',
@@ -158,7 +162,30 @@
   var sliderValue = document.querySelector('.upload-effect-level-value');
   var imagePreview = document.querySelector('.effect-image-preview');
 
-  // ползунок (количество эффекта)
+  // функция вычисление получения стиля эффекта из значения ползунка
+  var getIntensityLevel = function (level) {
+    if (imagePreview.classList.contains('effect-chrome')) {
+      document.querySelector('.effect-chrome').style.filter = 'grayscale(' + level.toFixed(1) + ')';
+    }
+
+    if (imagePreview.classList.contains('effect-sepia')) {
+      document.querySelector('.effect-sepia').style.filter = 'sepia(' + level.toFixed(1) + ')';
+    }
+
+    if (imagePreview.classList.contains('effect-marvin')) {
+      document.querySelector('.effect-marvin').style.filter = 'invert(' + (level * 100).toFixed(0) + '%)';
+    }
+
+    if (imagePreview.classList.contains('effect-phobos')) {
+      document.querySelector('.effect-phobos').style.filter = 'blur(' + level.toFixed(1) * 3 + 'px)';
+    }
+
+    if (imagePreview.classList.contains('effect-heat')) {
+      document.querySelector('.effect-heat').style.filter = 'brightness(' + level.toFixed(1) * 3 + ')';
+    }
+  };
+
+  // функция ползунок (количество эффекта)
   thumbElem.onmousedown = function (e) {
     var thumbCoords = getCoords(thumbElem);
     var shiftX = e.pageX - thumbCoords.left;
@@ -185,21 +212,7 @@
       sliderProgress.style.width = (ratio * 100) + '%';
       sliderValue.setAttribute('value', Math.round(ratio * 100));
 
-      if (imagePreview.classList.contains('effect-chrome')) {
-        document.querySelector('.effect-chrome').style.filter = 'grayscale(' + ratio.toFixed(1) + ')';
-      }
-      if (imagePreview.classList.contains('effect-sepia')) {
-        document.querySelector('.effect-sepia').style.filter = 'sepia(' + ratio.toFixed(1) + ')';
-      }
-      if (imagePreview.classList.contains('effect-marvin')) {
-        document.querySelector('.effect-marvin').style.filter = 'invert(' + (ratio * 100).toFixed(0) + '%)';
-      }
-      if (imagePreview.classList.contains('effect-phobos')) {
-        document.querySelector('.effect-phobos').style.filter = 'blur(' + ratio.toFixed(1) * 3 + 'px)';
-      }
-      if (imagePreview.classList.contains('effect-heat')) {
-        document.querySelector('.effect-heat').style.filter = 'brightness(' + ratio.toFixed(1) * 3 + ')';
-      }
+      getIntensityLevel(ratio);
     };
 
     document.onmouseup = function () {
@@ -244,21 +257,7 @@
       thumbElem.style.left = 100 + '%';
       sliderProgress.style.width = 100 + '%';
 
-      if (imagePreview.classList.contains('effect-chrome')) {
-        document.querySelector('.effect-chrome').style.filter = 'grayscale(1)';
-      }
-      if (imagePreview.classList.contains('effect-sepia')) {
-        document.querySelector('.effect-sepia').style.filter = 'sepia(1)';
-      }
-      if (imagePreview.classList.contains('effect-marvin')) {
-        document.querySelector('.effect-marvin').style.filter = 'invert(100%)';
-      }
-      if (imagePreview.classList.contains('effect-phobos')) {
-        document.querySelector('.effect-phobos').style.filter = 'blur(3px)';
-      }
-      if (imagePreview.classList.contains('effect-heat')) {
-        document.querySelector('.effect-heat').style.filter = 'brightness(3)';
-      }
+      getIntensityLevel(1);
 
       // убираем слайдер у оригинальнйо картинки
       if (imagePreview.classList.contains('effect-none')) {
@@ -300,48 +299,76 @@
   });
 
   // Хэш-тэги
+  var form = document.querySelector('.upload-form');
   var buttonSubmitForm = document.querySelector('.upload-form-submit');
+  var inputHashtags = document.querySelector('.upload-form-hashtags');
+  var formDescription = document.querySelector('.upload-form-description');
 
 
-  function getDataFromInput() {
-    var input = document.querySelector('.upload-form-hashtags');
-    var inputData = input.value;
+  var addInputError = function (inputName) {
+    inputName.style.borderColor = ERROR_COLOR;
+    inputName.style.outlineColor = ERROR_COLOR;
+  };
 
-    var tagsArr = inputData.split(' ');
-    var result = [];
+  var removeInputError = function (inputName) {
+    inputName.style.outlineColor = 'inherit';
+    inputName.style.borderColor = 'inherit';
+  };
 
-    for (var t = 0; t < tagsArr.length; t++) {
-      var lowerCase = tagsArr[i].toLowerCase();
+  inputHashtags.addEventListener('change', function () {
+    var inputData = inputHashtags.value.toLowerCase().trim();
+    var result = inputData.split(' ');
 
-      if (result.indexOf(lowerCase) !== -1) {
-        input.setCustomValidity('дубль');
-        return;
+    var checkHashtags = function () {
+      var uniq = {};
+      for (var t = 0; t < result.length; t++) {
+
+        if (result[t].charAt(0) !== '#' && result[t].charAt(0).length > 0) {
+          inputHashtags.setCustomValidity('Отсутствует знак решетка (#) у хэштега');
+          addInputError(inputHashtags);
+        } else if (result[t].length > HASHTAG_MAX_LENGTH) {
+          inputHashtags.setCustomValidity('Максимальная длинна хэштега не должна быть больше ' + HASHTAG_MAX_LENGTH + ' символов');
+          addInputError(inputHashtags);
+        } else if (uniq.hasOwnProperty(result[t])) {
+          inputHashtags.setCustomValidity('Один и тот же хэш-тег не может быть использован дважды.');
+          addInputError(inputHashtags);
+        } else {
+          uniq[result[t]] = true;
+          inputHashtags.setCustomValidity('');
+          removeInputError(inputHashtags);
+        }
       }
+    };
 
-      if (tagsArr[t].length) {
-        result.push(tagsArr[t].toLowerCase());
-      }
+    if (result.length > HASHTAG_QUANTITY) {
+      inputHashtags.setCustomValidity('Слишком много хэштегов. Используйте не более ' + HASHTAG_QUANTITY + ' к одной фотографии');
+      addInputError(inputHashtags);
+    } else {
+      inputHashtags.setCustomValidity('');
+      removeInputError(inputHashtags);
+      checkHashtags();
     }
 
-    if (result.length > 5) {
-      input.setCustomValidity('слишком много хэштегов');
-    }
 
-    for (var r = 0; r < result.length; r++) {
-      if (result[r].charAt(0) !== '#') {
-        input.setCustomValidity('отсутствует знак решетка (#) у хэштега');
-      }
+  });
 
-      if (result[r].length > 20) {
-        input.setCustomValidity('максимальная длинна хэштега не должна быть больше 20 символов');
-      }
+  formDescription.addEventListener('change', function () {
+    if (formDescription.value.length > DESCRIPTION_MAX_LENGTH) {
+      formDescription.setCustomValidity('Максимальная длинна комментария ' + DESCRIPTION_MAX_LENGTH + ' символов!');
+      addInputError(formDescription);
+    } else {
+      formDescription.setCustomValidity('');
+      removeInputError(formDescription);
     }
-  }
+  });
 
   buttonSubmitForm.addEventListener('click', function () {
-    getDataFromInput();
+    if (formDescription.validity.valid === false && inputHashtags.validity.valid === false) {
+      form.submit();
+    }
   }
   );
+
 
 })();
 
