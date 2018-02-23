@@ -5,7 +5,6 @@
   var ESC_KEYCODE = 27;
   var ENTER_KEYCODE = 13;
   var ERROR_COLOR = '#E82C31';
-  var SUCCESS_COLOR = 'inherit';
   var DESCRIPTION_MAX_LENGTH = 140;
   var HASHTAG_MAX_LENGTH = 20;
   var HASHTAG_QUANTITY = 5;
@@ -312,8 +311,8 @@
   };
 
   var removeInputError = function (inputName) {
-    inputName.style.outlineColor = SUCCESS_COLOR;
-    inputName.style.borderColor = SUCCESS_COLOR;
+    inputName.style.outlineColor = 'inherit';
+    inputName.style.borderColor = 'inherit';
   };
 
   inputHashtags.addEventListener('change', function () {
