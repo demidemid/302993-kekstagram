@@ -325,9 +325,8 @@
       for (var t = 0; t < result.length; t++) {
 
         if (result[t].charAt(0) !== '#' && result[t].charAt(0).length > 0) {
-          addInputError(inputHashtags);
           inputHashtags.setCustomValidity('Отсутствует знак решетка (#) у хэштега');
-          // addInputError(inputHashtags);
+          addInputError(inputHashtags);
         } else if (result[t].length > HASHTAG_MAX_LENGTH) {
           inputHashtags.setCustomValidity('Максимальная длинна хэштега не должна быть больше ' + HASHTAG_MAX_LENGTH + ' символов');
           addInputError(inputHashtags);
@@ -343,7 +342,7 @@
     };
 
     if (result.length > HASHTAG_QUANTITY) {
-      inputHashtags.setCustomValidity('Слишком много хэштегов. Используйте не больше ' + HASHTAG_QUANTITY + ' к одной фотографии');
+      inputHashtags.setCustomValidity('Слишком много хэштегов. Используйте не более ' + HASHTAG_QUANTITY + ' к одной фотографии');
       addInputError(inputHashtags);
     } else {
       inputHashtags.setCustomValidity('');
