@@ -51,7 +51,7 @@
         newLeft = rightEdge;
       }
 
-      // magicSize or css style?
+      // magicSize or css style
       var thumbElemHalfWidth = 9;
       var ratio = Number(newLeft / rightEdge);
 
