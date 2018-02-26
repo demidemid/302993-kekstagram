@@ -6,8 +6,8 @@
     document.addEventListener('keydown', window.onPopupEscPress);
   };
 
-  for (var p = 0; p < window.picture.length; p++) {
-    window.picture[p].addEventListener('click', function (evt) {
+  for (var i = 0; i < window.picture.length; i++) {
+    window.picture[i].addEventListener('click', function (evt) {
       evt.preventDefault();
       onPicturePrewiewClick();
       var currentPicture = evt.currentTarget;

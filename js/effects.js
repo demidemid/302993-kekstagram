@@ -92,17 +92,17 @@
 
       var classList = window.imagePreview.classList;
 
-      for (var l = 0; l < classList.length; l++) {
-        if (classList[l] !== 'effect-image-preview') {
-          window.imagePreview.classList.remove(classList[l]);
+      for (var j = 0; j < classList.length; j++) {
+        if (classList[j] !== 'effect-image-preview') {
+          window.imagePreview.classList.remove(classList[j]);
         }
       }
 
       var effectClass = evt.target.id.substring(7);
       window.imagePreview.classList.add(effectClass);
       // при смене фильтров значение ползунка и прогресса на 100%
-      thumbElem.style.left = 100 + '%';
-      sliderProgress.style.width = 100 + '%';
+      thumbElem.style.left = '100%';
+      sliderProgress.style.width = '100%';
 
       getIntensityLevel(1);
 

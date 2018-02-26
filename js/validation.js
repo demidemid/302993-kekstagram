@@ -27,19 +27,19 @@
 
     var checkHashtags = function () {
       var uniq = {};
-      for (var t = 0; t < result.length; t++) {
+      for (var i = 0; i < result.length; i++) {
 
-        if (result[t].charAt(0) !== '#' && result[t].charAt(0).length > 0) {
+        if (result[i].charAt(0) !== '#' && result[i].charAt(0).length > 0) {
           inputHashtags.setCustomValidity('Отсутствует знак решетка (#) у хэштега');
           addInputError(inputHashtags);
-        } else if (result[t].length > HASHTAG_MAX_LENGTH) {
+        } else if (result[i].length > HASHTAG_MAX_LENGTH) {
           inputHashtags.setCustomValidity('Максимальная длинна хэштега не должна быть больше ' + HASHTAG_MAX_LENGTH + ' символов');
           addInputError(inputHashtags);
-        } else if (uniq.hasOwnProperty(result[t])) {
+        } else if (uniq.hasOwnProperty(result[i])) {
           inputHashtags.setCustomValidity('Один и тот же хэш-тег не может быть использован дважды.');
           addInputError(inputHashtags);
         } else {
-          uniq[result[t]] = true;
+          uniq[result[i]] = true;
           inputHashtags.setCustomValidity('');
           removeInputError(inputHashtags);
         }

@@ -7,7 +7,7 @@
 
   var onUploadBtnChange = function () {
     uploadOverlay.classList.remove('hidden');
-    statusUploaded();
+    openUploadForm();
   };
 
   // загрузка изображения и показ формы редактирования
@@ -35,7 +35,7 @@
 
   // открытие поп-апа загрузки изображение
   // скрытие уровня эффекта по умолчанию
-  var statusUploaded = function () {
+  var openUploadForm = function () {
     window.effectLevel.classList.add('hidden');
     document.addEventListener('keydown', window.onPopupEscPress);
     window.imagePreview.style.transform = 'scale(' + window.resizeValue.value.slice(0, -1) / 100 + ')';
