@@ -22,6 +22,7 @@
       fragment.appendChild(renderImage(pictures[i]));
     }
     pictureList.appendChild(fragment);
+    window.showBigPicture(pictures);
   };
 
   window.load(successHandler, window.errorHandler);
