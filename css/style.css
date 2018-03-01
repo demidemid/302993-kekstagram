@@ -731,6 +731,10 @@ input[type=radio]:checked + .upload-effect-label .upload-effect-preview {
   background: #ffffff;
 }
 
+.gallery-overlay-image {
+  width: 600px;
+}
+
 .gallery-overlay-image[src=""] {
   display: block;
   width: 640px;
