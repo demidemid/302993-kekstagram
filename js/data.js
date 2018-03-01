@@ -18,7 +18,7 @@
   var successHandler = function (pictures) {
     var fragment = document.createDocumentFragment();
 
-    for (var i = 1; i < pictures.length; i++) {
+    for (var i = 0; i < pictures.length; i++) {
       fragment.appendChild(renderImage(pictures[i]));
     }
     pictureList.appendChild(fragment);
