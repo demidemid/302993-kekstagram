@@ -10,6 +10,24 @@
   var inputHashtags = document.querySelector('.upload-form-hashtags');
   var formDescription = document.querySelector('.upload-form-description');
 
+  window.errorHandler = function (errorMessage) {
+    var node = document.createElement('div');
+    node.style = 'z-index: 100; margin: 0 auto; text-align: center; background-color: rgba(255, 0, 0, .8);';
+    node.style.position = 'fixed';
+    node.style.display = 'flex';
+    node.style.alignItems = 'center';
+    node.style.justifyContent = 'center';
+    node.style.height = '50px';
+    node.style.width = '50%';
+    node.style.transform = 'translateX(-50%)';
+    node.style.top = '0';
+    node.style.left = '50%';
+    node.style.fontSize = '30px';
+
+    node.textContent = errorMessage;
+    document.body.insertAdjacentElement('afterbegin', node);
+  };
+
 
   var addInputError = function (inputName) {
     inputName.style.borderColor = ERROR_COLOR;
@@ -68,9 +86,12 @@
     }
   });
 
-  buttonSubmitForm.addEventListener('click', function () {
-    if (formDescription.validity.valid === false && inputHashtags.validity.valid === false) {
-      form.submit();
-    }
+  buttonSubmitForm.addEventListener('click', function (evt) {
+    window.upload(new FormData(form), function () {
+      window.uploadOverlay.classList.add('hidden');
+    }, window.errorHandler);
+    evt.preventDefault();
+    // form.submit();
+
   });
 })();

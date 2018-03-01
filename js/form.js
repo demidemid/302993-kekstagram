@@ -2,11 +2,11 @@
 
 (function () {
   // форма редактирования изображения
-  var uploadOverlay = document.querySelector('.upload-overlay');
+  window.uploadOverlay = document.querySelector('.upload-overlay');
   var uploadFile = document.querySelector('#upload-file');
 
   var onUploadBtnChange = function () {
-    uploadOverlay.classList.remove('hidden');
+    window.uploadOverlay.classList.remove('hidden');
     openUploadForm();
   };
 
@@ -16,7 +16,7 @@
   // закрытие формы редактирования
   var uploadFormCancel = document.querySelector('.upload-form-cancel');
   uploadFormCancel.addEventListener('click', function () {
-    uploadOverlay.classList.add('hidden');
+    window.uploadOverlay.classList.add('hidden');
   });
 
   window.onPopupEscPress = function (evt) {
@@ -25,7 +25,7 @@
     }
   };
 
-  uploadOverlay.addEventListener('keydown', function (evt) {
+  window.uploadOverlay.addEventListener('keydown', function (evt) {
     if (evt.keyCode === window.ESC_KEYCODE) {
       document.removeEventListener('keydown', window.onPopupEscPress);
       document.removeEventListener('change', onUploadBtnChange);
@@ -43,7 +43,7 @@
 
   // функция закрытия
   var closePopup = function () {
-    uploadOverlay.classList.add('hidden');
+    window.uploadOverlay.classList.add('hidden');
     document.removeEventListener('keydown', window.onPopupEscPress);
   };
 
