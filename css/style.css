@@ -725,14 +725,9 @@ input[type=radio]:checked + .upload-effect-label .upload-effect-preview {
 
 .gallery-overlay-preview {
   display: inline-block;
-  width: 600px;
   margin: 30px 0;
 
   background: #ffffff;
-}
-
-.gallery-overlay-image {
-  width: 600px;
 }
 
 .gallery-overlay-image[src=""] {
