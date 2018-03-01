@@ -19,6 +19,13 @@
     window.uploadOverlay.classList.add('hidden');
   });
 
+  // функция закрытия
+  var closePopup = function () {
+    window.uploadOverlay.classList.add('hidden');
+    window.gallery.classList.add('hidden');
+    document.removeEventListener('keydown', window.onPopupEscPress);
+  };
+
   window.onPopupEscPress = function (evt) {
     if (evt.keyCode === window.ESC_KEYCODE) {
       closePopup();
@@ -39,12 +46,6 @@
     window.effectLevel.classList.add('hidden');
     document.addEventListener('keydown', window.onPopupEscPress);
     window.imagePreview.style.transform = 'scale(' + window.resizeValue.value.slice(0, -1) / 100 + ')';
-  };
-
-  // функция закрытия
-  var closePopup = function () {
-    window.uploadOverlay.classList.add('hidden');
-    document.removeEventListener('keydown', window.onPopupEscPress);
   };
 
 })();
