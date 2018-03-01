@@ -86,7 +86,7 @@
     }
   });
 
-  buttonSubmitForm.addEventListener('click', function (evt) {
+  form.addEventListener('submit', function (evt) {
     window.upload(new FormData(form), function () {
       window.uploadOverlay.classList.add('hidden');
     }, window.errorHandler);
