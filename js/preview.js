@@ -5,8 +5,7 @@
     window.gallery.classList.remove('hidden');
     document.addEventListener('keydown', window.onPopupEscPress);
   };
-
-  for (var i = 0; i < window.picture.length; i++) {
+  for (var i = 0; i < window.pictures.length; i++) {
     window.picture[i].addEventListener('click', function (evt) {
       evt.preventDefault();
       onPicturePrewiewClick();

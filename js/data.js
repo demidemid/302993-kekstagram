@@ -5,12 +5,12 @@
   var pictureList = document.querySelector('.pictures');
   var pictureTemplate = document.querySelector('#picture-template').content;
 
-  var renderImage = function (pictures) {
+  var renderImage = function (picture) {
     var pictureElement = pictureTemplate.cloneNode(true);
 
-    pictureElement.querySelector('img').src = pictures.url;
-    pictureElement.querySelector('.picture-likes').textContent = pictures.likes;
-    pictureElement.querySelector('.picture-comments').textContent = pictures.comments;
+    pictureElement.querySelector('img').src = picture.url;
+    pictureElement.querySelector('.picture-likes').textContent = picture.likes;
+    pictureElement.querySelector('.picture-comments').textContent = picture.comments;
 
     return pictureElement;
   };
