@@ -2,57 +2,107 @@
 
 (function () {
   var pictureList = document.querySelector('.pictures');
-
-  var pictureTemplate = document.querySelector('#picture-template').content;
+  var fragment = document.createDocumentFragment();
+  var filters = document.querySelector('.filters');
+  var allPhotos = document.querySelectorAll('.picture');
 
   // функция рэндеринга изображений
-  var renderImage = function (picturesArray) {
+  var renderImage = function (picture) {
+    var pictureTemplate = document.querySelector('#picture-template').content;
     var pictureElement = pictureTemplate.cloneNode(true);
-
-    pictureElement.querySelector('img').src = picturesArray.url;
-    pictureElement.querySelector('.picture-likes').textContent = picturesArray.likes;
-    pictureElement.querySelector('.picture-comments').textContent = picturesArray.comments.length;
-
+    pictureElement.querySelector('img').src = picture.url;
+    pictureElement.querySelector('.picture-likes').textContent = picture.likes;
+    pictureElement.querySelector('.picture-comments').textContent = picture.comments.length;
     return pictureElement;
   };
 
-  var activeFilters = document.querySelector('.filters');
+  var clearPhotos = function () {
+    allPhotos.forEach(function (item) {
+      item.parentNode.removeChild(item);
+    });
+  };
 
-  // массив для полученных данных с сервера
-  var picturesArray = [];
+  var getRandomIndex = function (array) {
+    return Math.floor(Math.random() * array.length);
+  };
 
-  var successHandler = function (pictures) {
-    var fragment = document.createDocumentFragment();
-    // сохраняем данные с сервера в массив
-    picturesArray = pictures;
-
-    for (var i = 0; i < picturesArray.length; i++) {
-      fragment.appendChild(renderImage(picturesArray[i]));
+  var showPictures = function (pictures) {
+    for (var i = 0; i < pictures.length; i++) {
+      fragment.appendChild(renderImage(pictures[i]));
     }
     pictureList.appendChild(fragment);
-
-    var pictureItems = pictureList.querySelectorAll('.picture');
-    window.showBigPicture(pictureItems);
-
-    activeFilters.classList.remove('filters-inactive');
   };
+
+  var shufflePictures = function (pictures) {
+    var mixedPictures = [];
+    while (mixedPictures.length < pictures.length) {
+      var randomIndex = getRandomIndex(pictures);
+      mixedPictures.push(pictures[randomIndex]);
+      pictures.splice(randomIndex, 0);
+    }
+
+    return mixedPictures;
+  };
+
+  var sortPictures = function (pictures, sortMode) {
+    if (sortMode === 'likes') {
+      return pictures.sort(function (a, b) {
+        return b.likes - a.likes;
+      });
+    } else if (sortMode === 'comments') {
+      return pictures.sort(function (a, b) {
+        return b.comments.length - a.comments.length;
+      });
+    }
+
+    return pictures;
+  };
+
+  var filterChange = function (pictures, value) {
+    var picturesCopy = pictures.slice();
+    var filteredPictures;
+    clearPhotos();
+
+    var getValue = function () {
+      switch (value) {
+        case 'popular': {
+          filteredPictures = sortPictures(picturesCopy, 'likes');
+          break;
+        }
+        case 'discussed': {
+          filteredPictures = sortPictures(picturesCopy, 'comments');
+          break;
+        }
+        case 'recommend': {
+          filteredPictures = sortPictures(picturesCopy);
+          break;
+        }
+        case 'random': {
+          filteredPictures = shufflePictures(picturesCopy);
+          break;
+        }
+      }
+
+      successHandler(filteredPictures);
+    };
+
+    window.debounce.debounce(getValue);
+  };
+
+  function successHandler(pictures) {
+    showPictures(pictures);
+    allPhotos = document.querySelectorAll('.picture');
+    window.showBigPicture(allPhotos);
+    filters.classList.remove('filters-inactive');
+
+    filters.addEventListener('click', function (evt) {
+      if (evt.target.type === 'radio') {
+        var value = evt.target.value;
+
+        filterChange(pictures, value);
+      }
+    });
+  }
 
   window.load(successHandler, window.errorHandler);
-
-  var popularPictures = activeFilters.querySelector('#filter-popular');
-
-  var compareLikes = function (a, b) {
-    return b.likes - a.likes;
-  };
-
-  var showPopular = function () {
-
-    var popItems = picturesArray.sort(compareLikes);
-    // console.log(popItems);
-    renderImage(popItems);
-  };
-
-  popularPictures.addEventListener('click', function () {
-    showPopular();
-  });
 })();
