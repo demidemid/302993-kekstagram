@@ -22,9 +22,9 @@
     });
   };
 
-  var getRandomIndex = function (array) {
-    return Math.floor(Math.random() * array.length);
-  };
+  // var getRandomIndex = function (array) {
+  //   return Math.floor(Math.random() * array.length);
+  // };
 
   var showPictures = function (pictures) {
     for (var i = 0; i < pictures.length; i++) {
@@ -33,17 +33,17 @@
     pictureList.appendChild(fragment);
   };
 
-  var shufflePictures = function (pictures) {
-    var arrayLength = pictures.length;
-    var mixedPictures = [];
-    while (mixedPictures.length < arrayLength) {
-      var randomIndex = getRandomIndex(pictures);
-      mixedPictures.push(pictures[randomIndex]);
-      pictures.splice(randomIndex, 1);
-    }
+  // var shufflePictures = function (pictures) {
+  //   var arrayLength = pictures.length;
+  //   var mixedPictures = [];
+  //   while (mixedPictures.length < arrayLength) {
+  //     var randomIndex = getRandomIndex(pictures);
+  //     mixedPictures.push(pictures[randomIndex]);
+  //     pictures.splice(randomIndex, 1);
+  //   }
 
-    return mixedPictures;
-  };
+  //   return mixedPictures;
+  // };
 
   var sortPictures = function (pictures, sortMode) {
     if (sortMode === 'likes') {
@@ -54,8 +54,19 @@
       return pictures.sort(function (a, b) {
         return b.comments.length - a.comments.length;
       });
+    } else if (sortMode === 'random') {
+      // var arrayLength = pictures.length;
+      // var mixedPictures = [];
+      // while (mixedPictures.length < arrayLength) {
+      //   var randomIndex = getRandomIndex(pictures);
+      //   mixedPictures.push(pictures[randomIndex]);
+      //   pictures.splice(randomIndex, 1);
+      // }
+      // return mixedPictures;
+      return pictures.sort(function () {
+        return Math.random() - 0.5;
+      });
     }
-
     return pictures;
   };
 
@@ -79,7 +90,7 @@
           break;
         }
         case 'random': {
-          filteredPictures = shufflePictures(picturesCopy);
+          filteredPictures = sortPictures(picturesCopy, 'random');
           break;
         }
       }
