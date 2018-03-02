@@ -34,8 +34,9 @@
   };
 
   var shufflePictures = function (pictures) {
+    var arrayLength = pictures.length;
     var mixedPictures = [];
-    while (mixedPictures.length < pictures.length) {
+    while (mixedPictures.length < arrayLength) {
       var randomIndex = getRandomIndex(pictures);
       mixedPictures.push(pictures[randomIndex]);
       pictures.splice(randomIndex, 1);
