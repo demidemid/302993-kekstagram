@@ -18,7 +18,7 @@
 
   var clearPhotos = function () {
     allPhotos.forEach(function (item) {
-      item.parentNode.removeChild(item);
+      item.remove();
     });
   };
 
@@ -38,7 +38,7 @@
     while (mixedPictures.length < pictures.length) {
       var randomIndex = getRandomIndex(pictures);
       mixedPictures.push(pictures[randomIndex]);
-      pictures.splice(randomIndex, 0);
+      pictures.splice(randomIndex, 1);
     }
 
     return mixedPictures;
