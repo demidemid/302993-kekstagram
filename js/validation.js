@@ -6,7 +6,6 @@
   var HASHTAG_MAX_LENGTH = 20;
   var HASHTAG_QUANTITY = 5;
   var form = document.querySelector('.upload-form');
-  var buttonSubmitForm = document.querySelector('.upload-form-submit');
   var inputHashtags = document.querySelector('.upload-form-hashtags');
   var formDescription = document.querySelector('.upload-form-description');
 
@@ -91,7 +90,5 @@
       window.uploadOverlay.classList.add('hidden');
     }, window.errorHandler);
     evt.preventDefault();
-    // form.submit();
-
   });
 })();

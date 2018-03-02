@@ -5,27 +5,54 @@
 
   var pictureTemplate = document.querySelector('#picture-template').content;
 
-  var renderImage = function (picture) {
+  // функция рэндеринга изображений
+  var renderImage = function (picturesArray) {
     var pictureElement = pictureTemplate.cloneNode(true);
 
-    pictureElement.querySelector('img').src = picture.url;
-    pictureElement.querySelector('.picture-likes').textContent = picture.likes;
-    pictureElement.querySelector('.picture-comments').textContent = picture.comments.length;
+    pictureElement.querySelector('img').src = picturesArray.url;
+    pictureElement.querySelector('.picture-likes').textContent = picturesArray.likes;
+    pictureElement.querySelector('.picture-comments').textContent = picturesArray.comments.length;
 
     return pictureElement;
   };
 
+  var activeFilters = document.querySelector('.filters');
+
+  // массив для полученных данных с сервера
+  var picturesArray = [];
+
   var successHandler = function (pictures) {
     var fragment = document.createDocumentFragment();
+    // сохраняем данные с сервера в массив
+    picturesArray = pictures;
 
-    for (var i = 0; i < pictures.length; i++) {
-      fragment.appendChild(renderImage(pictures[i]));
+    for (var i = 0; i < picturesArray.length; i++) {
+      fragment.appendChild(renderImage(picturesArray[i]));
     }
     pictureList.appendChild(fragment);
 
     var pictureItems = pictureList.querySelectorAll('.picture');
     window.showBigPicture(pictureItems);
+
+    activeFilters.classList.remove('filters-inactive');
   };
 
   window.load(successHandler, window.errorHandler);
+
+  var popularPictures = activeFilters.querySelector('#filter-popular');
+
+  var compareLikes = function (a, b) {
+    return b.likes - a.likes;
+  };
+
+  var showPopular = function () {
+
+    var popItems = picturesArray.sort(compareLikes);
+    // console.log(popItems);
+    renderImage(popItems);
+  };
+
+  popularPictures.addEventListener('click', function () {
+    showPopular();
+  });
 })();
