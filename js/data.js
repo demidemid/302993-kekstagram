@@ -66,7 +66,7 @@
     window.debounce.debounce(getValue);
   };
 
-  function successHandler(pictures) {
+  var successHandler = function (pictures) {
     showPictures(pictures);
     allPhotos = document.querySelectorAll('.picture');
     window.showBigPicture(allPhotos);
@@ -79,7 +79,7 @@
         filterChange(pictures, value);
       }
     });
-  }
+  };
 
   window.load(successHandler, window.errorHandler);
 })();
