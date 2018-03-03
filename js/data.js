@@ -29,7 +29,14 @@
     pictureList.appendChild(fragment);
   };
 
+  var setPictures = function (pictures) {
+    showPictures(pictures);
+    allPhotos = document.querySelectorAll('.picture');
+    window.showBigPicture(allPhotos);
+  };
+
   var filterChange = function (pictures, value) {
+    var pictureRecommend = pictures.slice();
     var picturesCopy = pictures.slice();
     var filteredPictures;
     clearPhotos();
@@ -49,7 +56,7 @@
           break;
         }
         case 'recommend': {
-          window.load(successHandler, window.errorHandler);
+          filteredPictures = pictureRecommend;
           break;
         }
         case 'random': {
@@ -60,18 +67,15 @@
         }
       }
 
-      successHandler(filteredPictures);
+      setPictures(filteredPictures);
     };
 
     window.debounce.debounce(getValue);
   };
 
-  function successHandler(pictures) {
-    showPictures(pictures);
-    allPhotos = document.querySelectorAll('.picture');
-    window.showBigPicture(allPhotos);
+  var successHandler = function (pictures) {
+    setPictures(pictures);
     filters.classList.remove('filters-inactive');
-
     filters.addEventListener('click', function (evt) {
       if (evt.target.type === 'radio') {
         var value = evt.target.value;
@@ -79,7 +83,7 @@
         filterChange(pictures, value);
       }
     });
-  }
+  };
 
   window.load(successHandler, window.errorHandler);
 })();
