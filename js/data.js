@@ -29,9 +29,15 @@
     pictureList.appendChild(fragment);
   };
 
+  var setPictures = function () {
+    showPictures();
+    allPhotos = document.querySelectorAll('.picture');
+    window.showBigPicture(allPhotos);
+  };
+
   var filterChange = function (pictures, value) {
-    var picturesCopy = pictures.slice();
     var pictureRecommend = pictures.slice();
+    var picturesCopy = pictures.slice();
     var filteredPictures;
     clearPhotos();
 
@@ -61,18 +67,15 @@
         }
       }
 
-      successHandler(filteredPictures);
+      setPictures(filteredPictures);
     };
 
     window.debounce.debounce(getValue);
   };
 
   var successHandler = function (pictures) {
-    showPictures(pictures);
-    allPhotos = document.querySelectorAll('.picture');
-    window.showBigPicture(allPhotos);
+    setPictures();
     filters.classList.remove('filters-inactive');
-
     filters.addEventListener('click', function (evt) {
       if (evt.target.type === 'radio') {
         var value = evt.target.value;
