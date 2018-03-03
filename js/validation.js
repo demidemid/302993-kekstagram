@@ -25,6 +25,10 @@
 
     node.textContent = errorMessage;
     document.body.insertAdjacentElement('afterbegin', node);
+    // закрытие сообщение об ошибке через 3000мс (3 секунды)
+    setTimeout(function () {
+      node.style.display = 'none';
+    }, 3000);
   };
 
 
@@ -40,30 +44,30 @@
 
   inputHashtags.addEventListener('change', function () {
     var inputData = inputHashtags.value.toLowerCase().trim();
-    var result = inputData.split(' ');
+    var resultHashtags = inputData.split(' ');
 
     var checkHashtags = function () {
       var uniq = {};
-      for (var i = 0; i < result.length; i++) {
+      for (var i = 0; i < resultHashtags.length; i++) {
 
-        if (result[i].charAt(0) !== '#' && result[i].charAt(0).length > 0) {
+        if (resultHashtags[i].charAt(0) !== '#' && resultHashtags[i].charAt(0).length > 0) {
           inputHashtags.setCustomValidity('Отсутствует знак решетка (#) у хэштега');
           addInputError(inputHashtags);
-        } else if (result[i].length > HASHTAG_MAX_LENGTH) {
+        } else if (resultHashtags[i].length > HASHTAG_MAX_LENGTH) {
           inputHashtags.setCustomValidity('Максимальная длинна хэштега не должна быть больше ' + HASHTAG_MAX_LENGTH + ' символов');
           addInputError(inputHashtags);
-        } else if (uniq.hasOwnProperty(result[i])) {
+        } else if (uniq.hasOwnProperty(resultHashtags[i])) {
           inputHashtags.setCustomValidity('Один и тот же хэш-тег не может быть использован дважды.');
           addInputError(inputHashtags);
         } else {
-          uniq[result[i]] = true;
+          uniq[resultHashtags[i]] = true;
           inputHashtags.setCustomValidity('');
           removeInputError(inputHashtags);
         }
       }
     };
 
-    if (result.length > HASHTAG_QUANTITY) {
+    if (resultHashtags.length > HASHTAG_QUANTITY) {
       inputHashtags.setCustomValidity('Слишком много хэштегов. Используйте не более ' + HASHTAG_QUANTITY + ' к одной фотографии');
       addInputError(inputHashtags);
     } else {
@@ -71,8 +75,6 @@
       removeInputError(inputHashtags);
       checkHashtags();
     }
-
-
   });
 
   formDescription.addEventListener('change', function () {

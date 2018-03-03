@@ -2,11 +2,12 @@
 
 (function () {
   // применение эффекта для изображения
+  var PIN_HALF_WIDTH = 9;
   window.effectLevel = document.querySelector('.upload-effect-level');
   window.imagePreview = document.querySelector('.effect-image-preview');
   var sliderElem = window.effectLevel.querySelector('.upload-effect-level-line');
-  var thumbElem = window.effectLevel.querySelector('.upload-effect-level-pin');
-  var sliderProgress = window.effectLevel.querySelector('.upload-effect-level-val');
+  var pinElement = window.effectLevel.querySelector('.upload-effect-level-pin');
+  var pinLevel = window.effectLevel.querySelector('.upload-effect-level-val');
   var sliderValue = document.querySelector('.upload-effect-level-value');
 
   // функция вычисление получения стиля эффекта из значения ползунка
@@ -33,30 +34,28 @@
   };
 
   // функция ползунок (количество эффекта)
-  thumbElem.onmousedown = function (e) {
-    var thumbCoords = getCoords(thumbElem);
-    var shiftX = e.pageX - thumbCoords.left;
+  pinElement.onmousedown = function (evtDown) {
+    var thumbCoords = getCoords(pinElement);
+    var shiftX = evtDown.pageX - thumbCoords.left;
     var sliderCoords = getCoords(sliderElem);
 
-    document.onmousemove = function (evt) {
+    document.onmousemove = function (evtMove) {
       //  вычесть координату родителя, т.к. position: relative
-      var newLeft = evt.pageX - shiftX - sliderCoords.left;
+      var newLeft = evtMove.pageX - shiftX - sliderCoords.left;
 
       // курсор ушёл вне слайдера
       if (newLeft < 0) {
         newLeft = 0;
       }
-      var rightEdge = sliderElem.offsetWidth - thumbElem.offsetWidth;
+      var rightEdge = sliderElem.offsetWidth - pinElement.offsetWidth;
       if (newLeft > rightEdge) {
         newLeft = rightEdge;
       }
 
-      // magicSize or css style
-      var thumbElemHalfWidth = 9;
       var ratio = Number(newLeft / rightEdge);
 
-      thumbElem.style.left = newLeft + thumbElemHalfWidth + 'px';
-      sliderProgress.style.width = (ratio * 100) + '%';
+      pinElement.style.left = newLeft + PIN_HALF_WIDTH + 'px';
+      pinLevel.style.width = (ratio * 100) + '%';
       sliderValue.setAttribute('value', Math.round(ratio * 100));
 
       getIntensityLevel(ratio);
@@ -66,14 +65,14 @@
       document.onmousemove = document.onmouseup = null;
     };
 
-    return false; // disable selection start (cursor change)
+    return false; // отключить начало выбора (изменение курсора)
   };
 
-  thumbElem.ondragstart = function () {
+  pinElement.ondragstart = function () {
     return false;
   };
 
-  function getCoords(elem) { // кроме IE8-
+  var getCoords = function (elem) { // кроме IE8-
     var box = elem.getBoundingClientRect();
 
     return {
@@ -81,14 +80,14 @@
       left: box.left + pageXOffset
     };
 
-  }
+  };
 
   var effectControls = document.querySelector('.upload-effect-controls');
-  var effect = effectControls.querySelectorAll('input[type="radio"]');
+  var effects = effectControls.querySelectorAll('input[type="radio"]');
 
   // смена фильтров
-  for (var i = 0; i < effect.length; i++) {
-    effect[i].addEventListener('click', function (evt) {
+  for (var i = 0; i < effects.length; i++) {
+    effects[i].addEventListener('click', function (evt) {
 
       var classList = window.imagePreview.classList;
 
@@ -100,9 +99,9 @@
 
       var effectClass = evt.target.id.substring(7);
       window.imagePreview.classList.add(effectClass);
-      // при смене фильтров значение ползунка и прогресса на 100%
-      thumbElem.style.left = '100%';
-      sliderProgress.style.width = '100%';
+      // при смене фильтров значение ползунка и уровень прогресса на 100%
+      pinElement.style.left = '100%';
+      pinLevel.style.width = '100%';
 
       getIntensityLevel(1);
 
