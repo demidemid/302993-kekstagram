@@ -51,6 +51,8 @@
     window.formDescription.value = '';
     window.formDescription.style.border = '';
     window.imagePreview.style.filter = 'none';
+    window.inputHashtags.setCustomValidity('');
+    window.formDescription.setCustomValidity('');
     document.querySelector('#upload-effect-none').checked = true;
     document.addEventListener('keydown', window.onPopupEscPress);
     window.imagePreview.style.transform = 'scale(' + window.resizeValue.value.slice(0, -1) / 100 + ')';

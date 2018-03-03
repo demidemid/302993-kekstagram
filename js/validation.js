@@ -53,12 +53,15 @@
         if (resultHashtags[i].charAt(0) !== '#' && resultHashtags[i].charAt(0).length > 0) {
           window.inputHashtags.setCustomValidity('Отсутствует знак решетка (#) у хэштега');
           addInputError(window.inputHashtags);
+          return;
         } else if (resultHashtags[i].length > HASHTAG_MAX_LENGTH) {
           window.inputHashtags.setCustomValidity('Максимальная длинна хэштега не должна быть больше ' + HASHTAG_MAX_LENGTH + ' символов');
           addInputError(window.inputHashtags);
+          return;
         } else if (uniq.hasOwnProperty(resultHashtags[i])) {
           window.inputHashtags.setCustomValidity('Один и тот же хэш-тег не может быть использован дважды.');
           addInputError(window.inputHashtags);
+          return;
         } else {
           uniq[resultHashtags[i]] = true;
           window.inputHashtags.setCustomValidity('');
