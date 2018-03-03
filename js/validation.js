@@ -25,6 +25,10 @@
 
     node.textContent = errorMessage;
     document.body.insertAdjacentElement('afterbegin', node);
+    // закрытие сообщение об ошибке через 3000мс (3 секунды)
+    setTimeout(function () {
+      node.style.display = 'none';
+    }, 3000);
   };
 
 
