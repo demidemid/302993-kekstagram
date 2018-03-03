@@ -29,8 +29,8 @@
     pictureList.appendChild(fragment);
   };
 
-  var setPictures = function () {
-    showPictures();
+  var setPictures = function (pictures) {
+    showPictures(pictures);
     allPhotos = document.querySelectorAll('.picture');
     window.showBigPicture(allPhotos);
   };
@@ -74,7 +74,7 @@
   };
 
   var successHandler = function (pictures) {
-    setPictures();
+    setPictures(pictures);
     filters.classList.remove('filters-inactive');
     filters.addEventListener('click', function (evt) {
       if (evt.target.type === 'radio') {
