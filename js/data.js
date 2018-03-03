@@ -31,6 +31,7 @@
 
   var filterChange = function (pictures, value) {
     var picturesCopy = pictures.slice();
+    var pictureRecommend = pictures.slice();
     var filteredPictures;
     clearPhotos();
 
@@ -49,7 +50,7 @@
           break;
         }
         case 'recommend': {
-          window.load(successHandler, window.errorHandler);
+          filteredPictures = pictureRecommend;
           break;
         }
         case 'random': {
