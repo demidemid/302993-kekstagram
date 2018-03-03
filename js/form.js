@@ -41,9 +41,17 @@
   });
 
   // открытие поп-апа загрузки изображение
-  // скрытие уровня эффекта по умолчанию
   var openUploadForm = function () {
+    // скрытие уровня эффекта по умолчанию
     window.effectLevel.classList.add('hidden');
+
+    // сбрасываем значения формы при ее открытие
+    window.inputHashtags.value = '';
+    window.inputHashtags.style.border = '';
+    window.formDescription.value = '';
+    window.formDescription.style.border = '';
+    window.imagePreview.style.filter = 'none';
+    document.querySelector('#upload-effect-none').checked = true;
     document.addEventListener('keydown', window.onPopupEscPress);
     window.imagePreview.style.transform = 'scale(' + window.resizeValue.value.slice(0, -1) / 100 + ')';
   };

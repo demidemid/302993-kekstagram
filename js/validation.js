@@ -6,8 +6,8 @@
   var HASHTAG_MAX_LENGTH = 20;
   var HASHTAG_QUANTITY = 5;
   var form = document.querySelector('.upload-form');
-  var inputHashtags = document.querySelector('.upload-form-hashtags');
-  var formDescription = document.querySelector('.upload-form-description');
+  window.inputHashtags = document.querySelector('.upload-form-hashtags');
+  window.formDescription = document.querySelector('.upload-form-description');
 
   window.errorHandler = function (errorMessage) {
     var node = document.createElement('div');
@@ -42,8 +42,8 @@
     inputName.style.borderColor = 'inherit';
   };
 
-  inputHashtags.addEventListener('change', function () {
-    var inputData = inputHashtags.value.toLowerCase().trim();
+  window.inputHashtags.addEventListener('change', function () {
+    var inputData = window.inputHashtags.value.toLowerCase().trim();
     var resultHashtags = inputData.split(' ');
 
     var checkHashtags = function () {
@@ -51,39 +51,39 @@
       for (var i = 0; i < resultHashtags.length; i++) {
 
         if (resultHashtags[i].charAt(0) !== '#' && resultHashtags[i].charAt(0).length > 0) {
-          inputHashtags.setCustomValidity('Отсутствует знак решетка (#) у хэштега');
-          addInputError(inputHashtags);
+          window.inputHashtags.setCustomValidity('Отсутствует знак решетка (#) у хэштега');
+          addInputError(window.inputHashtags);
         } else if (resultHashtags[i].length > HASHTAG_MAX_LENGTH) {
-          inputHashtags.setCustomValidity('Максимальная длинна хэштега не должна быть больше ' + HASHTAG_MAX_LENGTH + ' символов');
-          addInputError(inputHashtags);
+          window.inputHashtags.setCustomValidity('Максимальная длинна хэштега не должна быть больше ' + HASHTAG_MAX_LENGTH + ' символов');
+          addInputError(window.inputHashtags);
         } else if (uniq.hasOwnProperty(resultHashtags[i])) {
-          inputHashtags.setCustomValidity('Один и тот же хэш-тег не может быть использован дважды.');
-          addInputError(inputHashtags);
+          window.inputHashtags.setCustomValidity('Один и тот же хэш-тег не может быть использован дважды.');
+          addInputError(window.inputHashtags);
         } else {
           uniq[resultHashtags[i]] = true;
-          inputHashtags.setCustomValidity('');
-          removeInputError(inputHashtags);
+          window.inputHashtags.setCustomValidity('');
+          removeInputError(window.inputHashtags);
         }
       }
     };
 
     if (resultHashtags.length > HASHTAG_QUANTITY) {
-      inputHashtags.setCustomValidity('Слишком много хэштегов. Используйте не более ' + HASHTAG_QUANTITY + ' к одной фотографии');
-      addInputError(inputHashtags);
+      window.inputHashtags.setCustomValidity('Слишком много хэштегов. Используйте не более ' + HASHTAG_QUANTITY + ' к одной фотографии');
+      addInputError(window.inputHashtags);
     } else {
-      inputHashtags.setCustomValidity('');
-      removeInputError(inputHashtags);
+      window.inputHashtags.setCustomValidity('');
+      removeInputError(window.inputHashtags);
       checkHashtags();
     }
   });
 
-  formDescription.addEventListener('change', function () {
-    if (formDescription.value.length > DESCRIPTION_MAX_LENGTH) {
-      formDescription.setCustomValidity('Максимальная длинна комментария ' + DESCRIPTION_MAX_LENGTH + ' символов!');
-      addInputError(formDescription);
+  window.formDescription.addEventListener('change', function () {
+    if (window.formDescription.value.length > DESCRIPTION_MAX_LENGTH) {
+      window.formDescription.setCustomValidity('Максимальная длинна комментария ' + DESCRIPTION_MAX_LENGTH + ' символов!');
+      addInputError(window.formDescription);
     } else {
-      formDescription.setCustomValidity('');
-      removeInputError(formDescription);
+      window.formDescription.setCustomValidity('');
+      removeInputError(window.formDescription);
     }
   });
 
