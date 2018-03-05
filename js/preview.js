@@ -6,8 +6,8 @@
       window.gallery.classList.remove('hidden');
       document.addEventListener('keydown', window.onPopupEscPress);
     };
-    for (var i = 0; i < pictures.length; i++) {
-      pictures[i].addEventListener('click', function (evt) {
+    pictures.forEach(function (item) {
+      item.addEventListener('click', function (evt) {
         evt.preventDefault();
         onPicturePrewiewClick();
         var currentPicture = evt.currentTarget;
@@ -15,6 +15,6 @@
         window.gallery.querySelector('.likes-count').textContent = currentPicture.querySelector('.picture-likes').textContent;
         window.gallery.querySelector('.comments-count').textContent = currentPicture.querySelector('.picture-comments').textContent;
       });
-    }
+    });
   };
 })();
